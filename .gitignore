@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#Prevents sensitive data from being pushed
+/StoreFront.UI.MVC/appsettings.js
