@@ -153,12 +153,12 @@ namespace StoreFront.DATA.EF.Models
                     .IsFixedLength();
 
                 entity.Property(e => e.FirstName)
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .HasColumnName("FIrstName")
                     .IsFixedLength();
 
                 entity.Property(e => e.LastName)
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsFixedLength();
 
                 entity.Property(e => e.Phone)

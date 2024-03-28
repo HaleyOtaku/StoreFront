@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StoreFront.DATA.EF.Models
+namespace StoreFront.DATA.EF.Models-Force
 {
     public partial class AspNetUser
     {
