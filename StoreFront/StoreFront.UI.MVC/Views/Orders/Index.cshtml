@@ -1,0 +1,66 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2 class="text-center py-3">@ViewData["Title"]</h2>
+
+<p class="text-center">
+    <a class="btn btn-primary" asp-action="Create">Add Order</a>
+</p>
+
+<table class="table table-hover table-striped col-md-12 text-center">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipToName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipZip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipToName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipZip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
+                <a class="text-danger" asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

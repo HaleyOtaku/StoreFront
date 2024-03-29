@@ -1,0 +1,36 @@
+﻿@model StoreFront.DATA.EF.Models.Category
+
+@{
+    ViewData["Title"] = "Edit " + Model.CategoryName;
+}
+
+<h2 class="text-center py-3">@ViewData["Title"]</h2>
+@* 
+<h4>Category</h4>
+<hr /> *@
+<div class="row mb-3">
+    <div class="col-md-6 offset-md-3 text-center">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CategoryId" />
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label"></label>
+                <input asp-for="CategoryName" class="form-control" />
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryDescript" class="control-label"></label>
+                <input asp-for="CategoryDescript" class="form-control" />
+                <span asp-validation-for="CategoryDescript" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

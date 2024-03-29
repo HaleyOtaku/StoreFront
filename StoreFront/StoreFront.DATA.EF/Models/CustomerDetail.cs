@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StoreFront.DATA.EF.Models-Force
+namespace StoreFront.DATA.EF.Models
 {
     public partial class CustomerDetail
     {

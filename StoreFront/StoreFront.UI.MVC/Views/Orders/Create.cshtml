@@ -1,0 +1,54 @@
+﻿@model StoreFront.DATA.EF.Models.Order
+
+@{
+    ViewData["Title"] = "Add Order";
+}
+
+<h2 class="text-center py-3">@ViewData["Title"]</h2>
+
+@* <h4>Order</h4>
+<hr /> *@
+<div class="row mb-3">
+    <div class="col-md-6 offset-md-3 text-center">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderDate" class="control-label"></label>
+                <input asp-for="OrderDate" class="form-control" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipToName" class="control-label"></label>
+                <input asp-for="ShipToName" class="form-control" />
+                <span asp-validation-for="ShipToName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipCity" class="control-label"></label>
+                <input asp-for="ShipCity" class="form-control" />
+                <span asp-validation-for="ShipCity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipState" class="control-label"></label>
+                <input asp-for="ShipState" class="form-control" />
+                <span asp-validation-for="ShipState" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShipZip" class="control-label"></label>
+                <input asp-for="ShipZip" class="form-control" />
+                <span asp-validation-for="ShipZip" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

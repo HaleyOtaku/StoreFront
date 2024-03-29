@@ -7,14 +7,14 @@
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ashion | Template</title>
+    <title>@ViewData["Title"] | StoreFront</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
-    <!-- Css Styles -->
+    <!-- CSS Styles -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
@@ -72,21 +72,25 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="~/">Home</a></li>
-                            <li><a href="#">Women’s</a></li>
-                            <li><a href="#">Men’s</a></li>
-                            <li><a href="./shop.html">Shop</a></li>
+
+                            <li><a href="~/">Home</a></li>
+                            
+                            
                             <li>
-                                <a href="#">Pages</a>
+                                <a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Admin</a>
                                 <ul class="dropdown">
-                                    <li><a href="./product-details.html">Product Details</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a asp-action="ListUsers" asp-controller="Administration">Users</a></li>
+                                    <li><a asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
+                                    <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
+                                    <li><a asp-action="Index" asp-controller="CustomerDetails">Customer Details</a></li>
+                                    <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                          
                         </ul>
                     </nav>
                 </div>
@@ -142,17 +146,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-3 col-sm-5">
-                    <div class="footer__widget">
-                        <h6>Quick links</h6>
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="col-lg-2 col-md-3 col-sm-4">
                     <div class="footer__widget">
                         <h6>Account</h6>
@@ -166,11 +159,6 @@
                 </div>
                 <div class="col-lg-4 col-md-8 col-sm-8">
                     <div class="footer__newslatter">
-                        <h6>NEWSLETTER</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
                         <div class="footer__social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -206,7 +194,7 @@
     <!-- Search End -->
     <!-- Js Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/bootstrap.bundle.js"></script>
     <script src="~/js/jquery.magnific-popup.min.js"></script>
     <script src="~/js/jquery-ui.min.js"></script>
     <script src="~/js/mixitup.min.js"></script>
