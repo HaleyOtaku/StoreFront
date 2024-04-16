@@ -1,0 +1,178 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+@model IPagedList<StoreFront.DATA.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Tiled Products";
+}
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a>
+                    <span>Shop</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<h2 class="text-center py-3 m-4">Shop Products</h2>
+
+<p class="text-center mt-5">
+
+    @if (User.IsInRole("Admin"))
+    {<span>
+        <a class="btn btn-success" asp-action="Create">Add Product</a>
+        <a asp-action="Discontinued" class="btn btn-warning mx-2">Discontinued Gadgets</a>
+    </span>
+    }
+    <a asp-action="Index" class="btn btn-primary">Table View</a>
+</p>
+
+
+<!-- Product Section Begin -->
+
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <form asp-action="TiledProducts" method="get">
+                    <label for="categoryId" class="control-label d-block text-center">Filter by Category</label>
+                    <select name="categoryId" class="form-control text-center mb-3" asp-items="ViewBag.CategoryId">
+                        <option value="0">[Choose a Category]</option>
+                    </select>
+
+                    <input name="searchTerm" class="form-control text-center" placeholder="Search Products" />
+                    <input type="submit" value="Go" class="btn btn-primary text-center w-50 mx-auto my-4 d-block"/>
+
+
+                    </form>
+                    @if (ViewBag.NbrResults != null)
+                    {
+                        <p class="mt-5 p-2 alert alert-warning text-center">
+                            Showing @ViewBag.NbrResults result @(ViewBag.NbrResults == 1 ? "" : "s") for '@ViewBag.SearchTerm'.
+                        </p>
+                    }
+                    <div class="section-title">
+                        <h4>New product</h4>
+                    </div>
+                </div>
+            </div>
+        
+            
+      
+            <div class="row property__gallery">
+
+
+                @foreach(var item in Model){
+                <div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="../images/@item.ProductImage">
+                            <img class="w-auto h-auto" src="~/images/@item.ProductImage" />
+                            <ul class="product__hover">
+                                @* <li><img class="w-auto h-auto"  src="~/images/@item.ProductImage"/> </li> *@
+                                <li><a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId"><span class="icon_bag_alt"></span></a></li>
+                                <li><a asp-action="Details" asp-route-id="@item.ProductId"><span class="icon_search"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a asp-action="Details">@item.ProductName</a></h6>
+                            <div class="product__price">@item.ProductPrice.ToString("c")</div>
+                        </div>
+                    </div>
+                </div>
+                }
+        </div>
+
+        <div class="row mt-5">
+            <div class="w-50 mx-auto text-center">
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                <div class="w-100">
+                    @Html.PagedListPager(
+                             Model,
+                             page => Url.Action("TiledProducts", new { page, searchTerm = ViewBag.SearchTerm, categoryId = ViewBag.CategoryId })
+                             )
+                </div>
+            </div>
+        </div>
+       
+
+
+       </div>
+
+    </section>
+
+
+@*Original Scaffolded Table Below*@
+@* <p>
+<h1>TiledProducts</h1>
+
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescript)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescript)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductStatus.ProductStatusName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+ *@

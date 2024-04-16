@@ -1,0 +1,81 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Discontinued Products";
+}
+
+<h2 class="text-center py-3 m-4">Discontinued Products</h2>
+
+<p class="text-center">
+    <a asp-action="Index" class="btn btn-primary mx-2">Table View</a>
+    <a asp-action="TiledProducts" class="btn btn-primary">Tile View</a>
+</p>
+
+<table class="table table-hover table-striped col-md-9 offset-md-2 text-center">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.ProductDescript)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ProductId">
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.ProductDescript)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td> *@
+            <td>
+                <img src="~/images/t_@item.ProductImage" class="img-fluid" alt="@item.ProductDescript" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductStatus.ProductStatusName)
+            </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="text-warning"><i class="fa fa-pencil-square text-warning"></i> Edit</a> |
+                    @if (item.OrderProducts.Count() == 0)//item.OrderProducts retrieves any related records for the Product
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ProductId" class="text-danger"><i class="fa fa-trash"></i> Delete</a>
+                    }
+                    else
+                    {
+                        <a disabled="true" class="text-danger" style="text-decoration: line-through;" title="Can't delete - referenced by other records."><i class="fa fa-ban">&nbsp;</i>Delete</a>
+                    }
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

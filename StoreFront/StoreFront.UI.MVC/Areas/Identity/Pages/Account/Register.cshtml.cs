@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
 {
@@ -97,6 +98,37 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(50)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; } = null!;
+
+            [Required]
+            [StringLength(50)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; } = null!;
+
+            [Required]
+            [StringLength(150)]
+            public string Address { get; set; } = null!;
+
+            [Required]
+            [StringLength(50)]
+            public string City { get; set; } = null!;
+
+            [Required]
+            [StringLength(2)]
+            public string State { get; set; } = null!;
+
+            [Required]
+            [StringLength(5)]
+            [DataType(DataType.PostalCode)]
+            public string Zip { get; set; } = null!;
+
+            [StringLength(24)]
+            [DataType(DataType.PhoneNumber)]
+            public string? Phone { get; set; }
         }
 
 
@@ -122,13 +154,34 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
+                    var customerId = await _userManager.GetUserIdAsync(user);
+
+                    #region Custom User Details
+                    StoreFrontContext _context = new StoreFrontContext();
+
+                    CustomerDetail customerDetail = new CustomerDetail()
+                    {
+                        CustomerId = customerId,
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        Address = Input.Address,
+                        City = Input.City,
+                        State = Input.State,
+                        Zip = Input.Zip,
+                        Phone = Input.Phone
+                    };
+
+                    _context.CustomerDetails.Add(customerDetail);//queue the record to be saved to the DB
+                    _context.SaveChanges();//save the queued record to the DB
+
+                    #endregion
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", customerId = customerId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

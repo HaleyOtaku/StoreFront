@@ -1,18 +1,52 @@
-﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
+﻿@* everywhere you see the data-setbg="" attribute it needs to start with ../ instead of ~/ 
+(this is true anywhere there is a css URL for an image in .NET MVC apps) 
+easiest fix for this is find and replace for the entire solution where you find:
+data-setbg="../
+and replace with:
+data-setbg="../
+*@
+
+@model IEnumerable<StoreFront.DATA.EF.Models.Product>
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Shop Products";
 }
 
-<h2 class="text-center py-3">@ViewData["Title"]</h2>
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a>
+                    <span>Shop</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<h2 class="text-center py-3 m-4">@ViewData["Title"]</h2>
+
 
 <p class="text-center">
-    <a class="btn btn-primary" asp-action="Create">Add Product</a>
+
+    @if (User.IsInRole("Admin"))
+    {
+     <a class="btn btn-success" asp-action="Create">Add Product</a>
+     <a asp-action="Discontinued" class="btn btn-warning mx-2">Discontinued Gadgets</a>
+    }
+
+    <a asp-action="TiledProducts" class="btn btn-primary">Tile View</a>
 </p>
 
 <table class="table table-hover table-striped col-md-9 offset-md-2 text-center">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th> 
             <th>
                 @Html.DisplayNameFor(model => model.ProductName)
             </th>
@@ -25,15 +59,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.UnitsInStock)
             </th>
-         @*    <th>
-                @Html.DisplayNameFor(model => model.ProductImage)
-            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.ProductStatus)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -41,7 +72,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @* @Html.DisplayFor(modelItem => item.ProductImage) *@
+                    <img class="w-auto h-auto" src="~/images/t_@item.ProductImage" />
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ProductId">
                 @Html.DisplayFor(modelItem => item.ProductName)
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductPrice)
@@ -52,21 +89,45 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UnitsInStock)
             </td>
-         @*    <td>
-                @Html.DisplayFor(modelItem => item.ProductImage)
-            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.ProductStatus.ProductStatusName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a class="text-danger" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
+            </td> *@
+            <td>                   
+                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId">
+                        <span class="icon_bag_alt mx-2" style="color:deeppink;"></span>
+                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span>
+                            <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+
+                            <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+
+                        </span>
+
+                        @if (item.OrderProducts.Count() == 0)
+                        {
+                            <a class="text-danger" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                        }
+                        else
+                        {
+                            <a disabled="true" class="text-danger" style="text-decoration: line-through;" title="Can't delete - referenced by other records."><i class="fa fa-ban">&nbsp;</i>Delete</a>
+                        }
+                    }
+                </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            //Update the selector to target the element with the table class
+            $('.table').DataTable();
+        });
+    </script>
+}

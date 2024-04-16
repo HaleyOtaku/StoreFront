@@ -4,13 +4,31 @@
     ViewData["Title"] = "Add Product";
 }
 
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a>
+                    <a href="@Url.Action("Index","Products")">Shop</a>
+                    <span>@ViewData["Title"]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
 <h2 class="text-center py-3">@ViewData["Title"]</h2>
 
 @* <h4>Product</h4>
 <hr /> *@
+
+
 <div class="row mb-3">
     <div class="col-md-6 offset-md-3 text-center">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label"></label>
@@ -41,12 +59,12 @@
                 <select asp-for="ProductStatusId" class ="form-control" asp-items="ViewBag.ProductStatusId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ProductImage" class="control-label"></label>
-                <input asp-for="ProductImage" class="form-control" />
+               @*  <label asp-for="ProductImage" class="control-label"></label> *@
+                <input type="file" asp-for="Image" class="form-control" />
                 <span asp-validation-for="ProductImage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
                 <a class="btn btn-secondary" asp-action="Index">Cancel</a>
             </div>
         </form>

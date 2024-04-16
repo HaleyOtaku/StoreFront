@@ -6,9 +6,26 @@
     ViewData["Title"] = "Edit User";
 }
 
-<h1>Edit User</h1>
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Action("Index","Home")"><i class="fa fa-home"></i> Home</a>
+                    <a href="#">Admin</a>
+                    <a href="@Url.Action("ListUsers","Administration")">Users</a>
+                    <span>@ViewData["Title"]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
 
-<form method="post" class="mt-3">
+<h1 class="m-3">Edit User</h1>
+
+<form method="post" class="m-3">
     <div class="form-group row">
         <label asp-for="Id" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
@@ -40,7 +57,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary mx-2">Update</button>
             <a asp-action="ListUsers" class="btn btn-primary">Cancel</a>
         </div>
     </div>

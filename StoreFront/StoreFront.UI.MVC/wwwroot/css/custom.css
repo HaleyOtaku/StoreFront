@@ -1,0 +1,16 @@
+﻿
+form input[type="submit"].btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+sup {
+    color: white;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    height: 1em;
+    padding: 1em;
+    text-align: center;
+}

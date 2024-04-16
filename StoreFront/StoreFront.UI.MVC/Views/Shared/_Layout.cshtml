@@ -1,9 +1,39 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> signInManager
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+
+@{
+    //Create a bool that determines whether there are items in the cart
+    bool cartHasProducts = false;
+
+    //Create a variable to store the number of products
+    int productCount = 0;
+
+    //Check if the "cart" string exists in Session
+    if (!String.IsNullOrEmpty(Context.Session.GetString("cart")))
+    {
+        //If we fall into this scope, the cart exists. Flip the bool.
+        cartHasProducts = true;
+
+        //Create the Dictionary to hold the cart items
+        var products = new Dictionary<int, CartItemViewModel>();
+
+        //Deserialize the session cart and store it in the Dictionary
+        products = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(Context.Session.GetString("cart"));
+
+        //Reassign our productCount variable to the sum of the Quantity of CartItems
+        productCount = products.Sum(p => p.Value.Qty);
+    }
+
+}
+
+<!DOCTYPE html>
 <html lang="zxx">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Ashion Template">
+    <meta name="description" content="@ViewData["Title"]">
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -22,7 +52,10 @@
     <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+    <link rel="stylesheet" href="~/css/style.css" type="text/css"/>
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -36,13 +69,6 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
-            <li><span class="icon_search search-switch"></span></li>
-            <li>
-                <a href="#">
-                    <span class="icon_heart_alt"></span>
-                    <div class="tip">2</div>
-                </a>
-            </li>
             <li>
                 <a href="#">
                     <span class="icon_bag_alt"></span>
@@ -51,7 +77,7 @@
             </li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="~/"><img src="~/img/logo.png" alt=""></a>
+            <a href="~/"><img src="~/images/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -65,9 +91,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <a href="~/"><img src="~/img/logo.png" alt=""></a>
-                    </div>
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
@@ -76,21 +99,34 @@
                             <li><a href="~/">Home</a></li>
                             
                             
-                            <li>
-                                <a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a>
-                            </li>
 
+                            @if (User.IsInRole("Admin"))
+                            {
                             <li>
                                 <a href="#">Admin</a>
                                 <ul class="dropdown">
                                     <li><a asp-action="ListUsers" asp-controller="Administration">Users</a></li>
                                     <li><a asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
-                                    <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
                                     <li><a asp-action="Index" asp-controller="CustomerDetails">Customer Details</a></li>
                                     <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
                                 </ul>
                             </li>
-                          
+                            }
+                            <li>
+                                <a class="nav-link" asp-action="Index" asp-controller="Products">Shop</a>
+                            </li>
+
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                               
+                                <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
+                             
+                            }
+
+                            <li>
+                                <a asp-action="Contact" asp-controller="Home">Contact</a>
+                            </li>
+
                         </ul>
                     </nav>
                 </div>
@@ -100,17 +136,10 @@
                           <partial name="_LoginPartial" /> @*Browser Login for AUTH : Delete Login Buttons in headers and replace with this*@
                         </div>
                         <ul class="header__right__widget">
-                            <li><span class="icon_search search-switch"></span></li>
                             <li>
-                                <a href="#">
-                                    <span class="icon_heart_alt"></span>
-                                    <div class="tip">2</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
+                                <a class="nav-link" asp-action="Index" asp-controller="ShoppingCart">
                                     <span class="icon_bag_alt"></span>
-                                    <div class="tip">2</div>
+                                    <sup>@productCount</sup>
                                 </a>
                             </li>
                         </ul>
@@ -123,6 +152,7 @@
         </div>
     </header>
     <!-- Header Section End -->
+  
    @RenderBody()
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -131,18 +161,18 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="./index.html"><img src="~/img/logo.png" alt=""></a>
+                            <a href="./index.html"><img src="~/images/logo.png" alt=""></a>
                         </div>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                             cilisis.
                         </p>
                         <div class="footer__payment">
-                            <a href="#"><img src="~/img/payment/payment-1.png" alt=""></a>
-                            <a href="#"><img src="~/img/payment/payment-2.png" alt=""></a>
-                            <a href="#"><img src="~/img/payment/payment-3.png" alt=""></a>
-                            <a href="#"><img src="~/img/payment/payment-4.png" alt=""></a>
-                            <a href="#"><img src="~/img/payment/payment-5.png" alt=""></a>
+                            <a href="#"><img src="~/images/payment-1.png" alt=""></a>
+                            <a href="#"><img src="~/images/payment-2.png" alt=""></a>
+                            <a href="#"><img src="~/images/payment-3.png" alt=""></a>
+                            <a href="#"><img src="~/images/payment-4.png" alt=""></a>
+                            <a href="#"><img src="~/images/payment-5.png" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -203,6 +233,7 @@
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/jquery.nicescroll.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     @RenderSection("scripts",false)
 </body>
 

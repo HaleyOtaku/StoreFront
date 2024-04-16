@@ -147,7 +147,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
 
 
 
-        [Display(Name = "In Stock")]
+        [Display(Name = "Units In Stock")]
         [Range(0, short.MaxValue)]
         [Required]
         public short UnitsInStock { get; set; }
@@ -164,7 +164,7 @@ namespace StoreFront.DATA.EF.Models//Metadata
 
 
 
-
+        [Display(Name = "Image")]
         public string? ProductImage { get; set; }
     }
 
